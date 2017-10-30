@@ -1,6 +1,8 @@
 ---
 - hosts: ms
   gather_facts: no
+  vars_files:
+  - ~/.apigee-secure/credentials.yml
   roles:
     - { role: apigee-opdk-setup-scopes-add,
         ax_group: axgroup001,
