@@ -1,5 +1,9 @@
 ---
-- hosts: localhost
-  remote_user: root
+- hosts: ms
+  gather_facts: no
   roles:
-    - apigee-opdk-setup-scopes-add
+    - { role: apigee-opdk-setup-scopes-add,
+        ax_group: axgroup001,
+        scope_org: opdk,
+        scope_env: test
+      }
