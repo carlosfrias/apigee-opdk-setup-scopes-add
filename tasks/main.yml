@@ -1,5 +1,9 @@
 ---
 # tasks file for apigee-opdk-setup-scopes-add
+
+- name: Regional Management Server IP Address
+  include_tasks: local_mgmt_ip.yml
+
 - name: Assert that attributes are available.
   assert:
     that:
