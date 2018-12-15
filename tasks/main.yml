@@ -10,7 +10,6 @@
 - name: Assert that attributes are available.
   assert:
     that:
-      - "ax_group is defined and ax_group | trim | length > 0"
       - "org_name is defined and org_name | trim | length > 0"
       - "env_name is defined and env_name | trim | length > 0"
       - "local_mgmt_ip is defined and local_mgmt_ip | trim | length > 0"
