@@ -28,7 +28,7 @@
     http_proxy: "{{ http_proxy | default('') }}"
     https_proxy: "{{ https_proxy | default('') }}"
     no_proxy: "{{ no_proxy | default('') }}"
-  delegate_to: "{{ private_address | default(ansible_default_ipv4.address) }}"
+  delegate_to: "{{ local_mgmt_ip | default(ansible_default_ipv4.address) }}"
 
 
 
