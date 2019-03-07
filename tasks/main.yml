@@ -32,7 +32,7 @@
       no_proxy: "{{ no_proxy | default('') }}"
 
   rescue:
-    -
+
     - name: Add scope to analytics group
       uri:
         user: '{{ opdk_user_email }}'
