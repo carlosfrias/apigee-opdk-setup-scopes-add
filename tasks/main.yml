@@ -17,18 +17,34 @@
       - "opdk_user_pass is defined and opdk_user_pass | trim | length > 0"
     msg: "Please provide the missing attribute"
 
-- name: Add scope to analytics group
-  uri:
-    user: '{{ opdk_user_email }}'
-    password: '{{ opdk_user_pass }}'
-    method: POST
-    body_format: json
-    url: http://{{ local_mgmt_ip }}:8080/v1/analytics/groups/ax/{{ ax_group }}/scopes?org={{ org_name }}&env={{ env_name }}
-  environment:
-    http_proxy: "{{ http_proxy | default('') }}"
-    https_proxy: "{{ https_proxy | default('') }}"
-    no_proxy: "{{ no_proxy | default('') }}"
-  delegate_to: "{{ local_mgmt_ip | default(ansible_default_ipv4.address) }}"
+- block:
+
+  - name: Add scope to analytics group
+    uri:
+      user: '{{ opdk_user_email }}'
+      password: '{{ opdk_user_pass }}'
+      method: POST
+      body_format: json
+      url: http://{{ local_mgmt_ip }}:8080/v1/analytics/groups/ax/{{ ax_group }}/scopes?org={{ org_name }}&env={{ env_name }}
+    environment:
+      http_proxy: "{{ http_proxy | default('') }}"
+      https_proxy: "{{ https_proxy | default('') }}"
+      no_proxy: "{{ no_proxy | default('') }}"
+
+  rescue:
+    -
+    - name: Add scope to analytics group
+      uri:
+        user: '{{ opdk_user_email }}'
+        password: '{{ opdk_user_pass }}'
+        method: POST
+        body_format: json
+        url: http://{{ local_mgmt_ip }}:8080/v1/analytics/groups/ax/{{ ax_group }}/scopes?org={{ org_name }}&env={{ env_name }}
+      environment:
+        http_proxy: "{{ http_proxy | default('') }}"
+        https_proxy: "{{ https_proxy | default('') }}"
+        no_proxy: "{{ no_proxy | default('') }}"
+      delegate_to: "{{ local_mgmt_ip | default(ansible_default_ipv4.address) }}"
 
 
 
