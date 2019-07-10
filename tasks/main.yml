@@ -39,7 +39,7 @@
         password: '{{ opdk_user_pass }}'
         method: POST
         body_format: json
-        url: http://{{ local_mgmt_ip }}:8080/v1/analytics/groups/ax/{{ ax_group }}/scopes?org={{ org_name }}&env={{ env_name }}
+        url: http://127.0.0.1:8080/v1/analytics/groups/ax/{{ ax_group }}/scopes?org={{ org_name }}&env={{ env_name }}
       environment:
         http_proxy: "{{ http_proxy | default('') }}"
         https_proxy: "{{ https_proxy | default('') }}"
