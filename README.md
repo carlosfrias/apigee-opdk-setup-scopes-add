@@ -1,49 +1,50 @@
-Role Name
-=========
+# apigee-opdk-setup-scopes-add — Bind Org/Env Scopes to an Apigee OPDK Analytics Group
 
-A brief description of the role goes here.
+> **An Ansible role that binds an organization and environment as a scope on an Apigee analytics group** — the scope-binding step in the analytics topology lifecycle: `axgroup → consumer-group → {consumers, datastores} + {scopes (org, env)}`.
 
-Requirements
-------------
+> [!NOTE]
+> Engineering portfolio note — this role is part of the analytics-topology lifecycle. See the [skills assessment →](SKILLS-ASSESSMENT.md) for the expertise applied.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role adds a scope (org + env) to an existing axgroup, completing the analytics topology: the axgroup now has consumers (Qpid), datastores (Postgres), and scopes (org/env). It is composed after `apigee-opdk-setup-qpid-add` and `apigee-opdk-setup-postgres-add`. See the [`apigee-edge-opdk`](https://github.com/carlosfrias/apigee-edge-opdk) framework for composition playbooks.
 
-Role Variables
---------------
-
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
 <!-- BEGIN Google Required Disclaimer -->
 
-# Not Google Product Clause
+## Not Google Product Clause
 
 This is not an officially supported Google product.
 <!-- END Google Required Disclaimer -->
-<!-- BEGIN Google How To Contribute -->
-# How to Contribute
 
-We'd love to accept your patches and contributions to this project. Please review our [guidelines](CONTRIBUTING.md).
-<!-- END Google How To Contribute -->
+---
+
+## What the role actually does
+
+`tasks/main.yml`:
+
+1. **Determine network interface and local Management Server IP** — `interface.yml` and `local_mgmt_ip.yml` (shared includes).
+2. **Assert required attributes** — `org_name`, `env_name`, `local_mgmt_ip`, credentials.
+3. **Add scope to the analytics group** — `POST /v1/analytics/groups/ax/{ax_group}/scopes?org={org_name}&env={env_name}`.
+4. **Rescue with local delegation** — if the direct call fails, re-run against `127.0.0.1:8080` delegated to the MS host.
+
+---
+
+## Role variables (selected)
+
+| Variable | Purpose |
+|----------|---------|
+| `ax_group` | The analytics group name (default: `axgroup001`) |
+| `org_name` | The Apigee organization to bind |
+| `env_name` | The Apigee environment to bind |
+| `local_mgmt_ip` | Management Server IP |
+| `opdk_user_email` / `opdk_user_pass` | MS API credentials |
+
+---
+
+## Provenance
+
+Authored and maintained by **Carlos Frias** during his tenure on Apigee Edge Private Cloud. One of the analytics-topology roles in the `apigee-opdk-*` corpus.
+
+Contributions welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## License
+
+See [LICENSE](./LICENSE).
